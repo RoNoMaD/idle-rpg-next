@@ -1,34 +1,88 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Idle RPG
 
-## Getting Started
+> A basic idle RPG game
 
-First, run the development server:
+A simple RPG character creator and idle game to test the market and the concept.
 
-```bash
+## Developing
+
+### Built With
+
+#### Front (UI) dependencies
+
+- [React](https://reactjs.org/) : A JavaScript library for building user interfaces
+
+#### Back (server) dependencies
+
+- [NextJS](https://nextjs.org/): The React Famework for Production
+- [Prisma](https://www.prisma.io/): an open source ORM.
+
+#### Database
+
+- [PostgreSQL](https://www.postgresql.org/): PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+
+#### Formatting/Linting/Testing dev dependencies
+
+- [Prettier](https://prettier.io/) : An opinionated code formatter.
+- [ESLint](https://eslint.org/) : A pluggable linting utility for JavaScript and JSX.
+- [stylelint](https://stylelint.io/) : A mighty, modern linter that helps you avoid errors and enforce conventions in your styles.
+- [Jest](https://jestjs.io/) : is a delightful JavaScript Testing Framework with a focus on simplicity.
+- [testing-library](https://testing-library.com/) : Simple and complete testing utilities that encourage good testing practices
+- [cypress](https://www.cypress.io/) : Fast, easy and reliable testing for anything that runs in a browser.
+
+### Prerequisites
+
+Install the following tools :
+
+- [Git](https://git-scm.com/downloads) : A distributed version control system.
+
+- [NodeJS](https://nodejs.org/en/download/) : a JavaScript runtime built on Chrome's V8 JavaScript engine. It includes [npm](https://www.npmjs.com/) as a package manager for JavaScript.
+
+### Configuration
+
+Rename the .env.local.example file to .env and fill it with your database and oAuth provider infos.
+
+### Setting up Dev
+
+Here's a brief intro about what a developer must do in order to start developing
+the project further:
+
+```shell
+git clone https://github.com/RoNoMaD/idle-rpg-next.git
+cd idle-rpg-next/
+npm install
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Building
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```shell
+npm run build
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Tests
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Unit and integration
 
-## Learn More
+```shell
+npm run test
+```
 
-To learn more about Next.js, take a look at the following resources:
+End to end
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```shell
+npm run test:e2e:run
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Api Reference
 
-## Deploy on Vercel
+If the api is external, link to api documentation. If not describe your api including authentication methods as well as explaining all the endpoints with their required parameters.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Database
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Explaining what database (and version) has been used. Provide download links.
+Documents your database design and schemas, relations etc...
+
+## Licensing
+
+MIT

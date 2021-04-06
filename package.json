@@ -1,15 +1,75 @@
 {
   "name": "idle-rpg-next",
   "version": "0.1.0",
+  "description": "An simple idle RPG game",
+  "license": "MIT",
+  "author": {
+    "name": "Romain Lebascle",
+    "email": "romain.lebascle@gmail.com",
+    "url": "https://romainlebascle.netlify.app"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prisma-studio": "prisma studio",
+    "type-check": "tsc --pretty --noEmit",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext ts --ext tsx --ext js",
+    "test": "jest",
+    "test:e2e:open": "cypress open",
+    "test:e2e:run": "cypress run"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "npm run format",
+      "npm run lint",
+      "npm run test -- --findRelatedTests"
+    ]
   },
   "dependencies": {
+    "@prisma/client": "^2.20.1",
     "next": "10.1.2",
+    "next-auth": "^3.13.3",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-axe": "^3.5.4",
+    "react-dom": "17.0.2",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "@testing-library/cypress": "^7.0.5",
+    "@types/jest": "^26.0.22",
+    "@types/next-auth": "^3.13.0",
+    "@types/node": "^14.14.37",
+    "@types/react": "^17.0.3",
+    "@types/react-axe": "^3.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.21.0",
+    "@typescript-eslint/parser": "^4.21.0",
+    "babel-jest": "^26.6.3",
+    "cypress": "^6.9.1",
+    "cypress-social-logins": "^1.11.2",
+    "eslint": "^7.23.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-cypress": "^2.11.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.3.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^6.0.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "jest-watch-typeahead": "^0.6.2",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "prisma": "^2.20.1",
+    "typescript": "^4.2.3"
   }
 }
