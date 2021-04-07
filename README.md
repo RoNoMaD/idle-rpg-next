@@ -62,13 +62,34 @@ npm run build
 
 ## Tests
 
-Unit and integration
+### Unit and integration
 
 ```shell
 npm run test
 ```
 
-End to end
+### End to end
+
+You need to create a cypress.env.json file with the follwing :
+
+```json
+{
+  "GITHUB_USER": "",
+  "GITHUB_PW": "!",
+  "COOKIE_NAME": "next-auth.session-token",
+  "SITE_NAME": "http://localhost:3000"
+}
+```
+
+Where GITHUB_USER and GITHUB_PW are GitHub credentials that will be used to login.
+
+You can then start a dev server
+
+```shell
+npm run dev
+```
+
+and run your tests
 
 ```shell
 npm run test:e2e:run
@@ -76,12 +97,49 @@ npm run test:e2e:run
 
 ## Api Reference
 
-If the api is external, link to api documentation. If not describe your api including authentication methods as well as explaining all the endpoints with their required parameters.
+### Characters
+
+POST /characters
+body JSON
+{
+name: string required;
+}
+
+PATCH /characters/:id
+body JSON
+{
+health: number;
+attack: number;
+defense: number;
+magik: number;
+}
+
+DELETE /characters/:id
+
+### Fights (not implemented yet)
+
+POST /characters/:id/fights
+
+TODO: add a link to OpenAPI
 
 ## Database
 
-Explaining what database (and version) has been used. Provide download links.
-Documents your database design and schemas, relations etc...
+We use PostgreSQL.
+
+For development purpose a database is hosted on CleverCloud.
+
+We use Prisma to describe our database schema.
+
+If you want to use your own database and map your data model to the database schema you can run the following command :
+
+```shell
+npx prisma migrate dev --name init
+```
+
+This command does two things:
+
+- It creates a new SQL migration file for this migration
+- It runs the SQL migration file against the database
 
 ## Licensing
 
