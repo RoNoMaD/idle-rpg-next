@@ -1,4 +1,4 @@
-describe("Login page", () => {
+describe("smoke", () => {
   before(() => {
     cy.log(`Visiting ${Cypress.env("SITE_NAME")}`);
     cy.visit("/");
@@ -44,17 +44,13 @@ describe("Login page", () => {
           Cypress.Cookies.defaults({
             preserve: cookieName,
           });
-
-          // remove the two lines below if you need to stay logged in
-          // for your remaining tests
-          // cy.visit("/api/auth/signout");
-          // cy.get("form").submit();
         }
       });
   });
 
   it("New Character", () => {
-    const newCharacterName = "Robert";
+    cy.visit("/");
+    const newCharacterName = "Frodo";
     cy.findByRole("link", { name: /new character/i }).click();
     cy.findByRole("textbox", { name: /name/i }).click().type(newCharacterName);
     cy.findByRole("button", { name: /create/i }).click();
@@ -62,9 +58,16 @@ describe("Login page", () => {
   });
 
   it("Update Character", () => {
-    const newCharacterName = "Robert";
-    cy.findByRole("heading", { name: /robert/i }).click();
+    cy.findByRole("heading", { name: /frodo/i }).click();
     cy.findByRole("link", { name: /edit/i }).click();
+    cy.findByRole("spinbutton", { name: /magik/i }).click().type("{upArrow}");
+    cy.findByRole("button", { name: /submit/i }).click();
+  });
+
+  it("Delete Character", () => {
+    cy.visit("/");
+    cy.findByRole("heading", { name: /frodo/i }).click();
+    cy.findByRole("button", { name: /delete/i }).click();
   });
 
   it("Logout", () => {

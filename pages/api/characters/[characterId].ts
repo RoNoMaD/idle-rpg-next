@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
-import * as yup from "yup";
+// import * as yup from "yup";
 
 import { updateCharacter } from "../../../services/character";
 

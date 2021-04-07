@@ -77,7 +77,7 @@ export async function updateCharacter(
   );
 
   // check we have enought skill points
-  if (skillCost >= originalCharacter.skillPoints) {
+  if (skillCost <= originalCharacter.skillPoints) {
     await prisma.character.updateMany({
       where: {
         id: characterId,

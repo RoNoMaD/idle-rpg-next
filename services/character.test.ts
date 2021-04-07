@@ -19,18 +19,18 @@ test("original attack at 5 and wanted attack at 2 to throw an error", () => {
 });
 
 test(`original attack at 0 and wanted attack at 7 and
-original health at 1 and wanted health at 3
+original health at 10 and wanted health at 13
  to cost 8 skill points`, () => {
   const originalCharater = {
     id: 0,
     name: "test",
     level: 1,
     skillPoints: 12,
-    health: 1,
+    health: 10,
     attack: 0,
     defense: 0,
     magik: 0,
     userId: 0,
   };
-  expect(getIncreaseSkillsCost(originalCharater, 3, 7, 0, 0)).toBe(8);
+  expect(getIncreaseSkillsCost(originalCharater, 13, 7, 0, 0)).toBe(11);
 });
