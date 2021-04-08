@@ -34,3 +34,7 @@ cypress.env.json
 
 # vercel
 .vercel
+
+# cypress
+cypress/videos
+cypress/screenshots
