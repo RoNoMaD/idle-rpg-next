@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 describe("smoke", () => {
   before(() => {
     cy.log(`Visiting ${Cypress.env("SITE_NAME")}`);
@@ -19,7 +20,7 @@ describe("smoke", () => {
       loginSelector: `.signin .provider form[action="${Cypress.env(
         "SITE_NAME"
       )}/api/auth/signin/github"] button[type="submit"]`,
-      postLoginSelector: `[class^="index_grid"]`,
+      postLoginSelector: `[data-testid="username-display"]`,
     };
 
     return cy

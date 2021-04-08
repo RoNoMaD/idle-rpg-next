@@ -46,7 +46,7 @@ const Header: React.FC = () => {
     );
     right = (
       <div className="right">
-        <p>
+        <p data-testid="username-display">
           {session.user.name}{" "}
           {session.user.email ? `(${session.user.email})` : null}
         </p>
