@@ -16,8 +16,11 @@
     "prisma-studio": "prisma studio",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write .",
-    "lint": "eslint . --ext ts --ext tsx --ext js",
-    "test": "jest",
+    "lint": "eslint . --ext ts --ext tsx --ext js --cache-location node_modules/.cache/eslint",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --watch=false --coverage",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --watch --runInBand",
+    "test": "is-ci-cli \"test:coverage\" \"test:watch\"",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test:e2e:dev": "start-server-and-test dev http://localhost:3000 cy:open",
@@ -31,9 +34,7 @@
       "npm run format",
       "npm run lint",
       "npm run test -- --findRelatedTests"
-    ],
-    "*.{ts,tsx,js}": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    ]
   },
   "dependencies": {
     "@prisma/client": "^2.20.1",
