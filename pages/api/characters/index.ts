@@ -1,59 +1,48 @@
 import { Character } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getSession } from "next-auth/client";
-import prisma from "../../../lib/prisma";
+import { countUserCharacters, createCharacter } from "@dao/characters";
+import { createCharacterSchema } from "schemas/charactersSchemas";
+import { session } from "middleware/session";
+import { Session } from "next-auth";
 
-export default async (
+const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<Character | Error>
+  res: NextApiResponse<Character | Error>,
+  session: Session
 ): Promise<void> => {
-  const {
-    method,
-    body: { name },
-  } = req;
-
-  const session = await getSession({ req });
-  if (session) {
-    if (method === "POST") {
-      const {
-        _count: { characters: charactersCount },
-      } = await prisma.user.findUnique({
-        where: {
-          email: session?.user?.email,
-        },
-        select: {
-          _count: {
-            select: {
-              characters: true,
-            },
-          },
-        },
+  const { method } = req;
+  if (method === "POST") {
+    try {
+      req.body = await createCharacterSchema.validate(req.body, {
+        abortEarly: false,
+        stripUnknown: true,
       });
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+    const charactersCount = await countUserCharacters(session?.user?.email);
 
-      if (charactersCount < 10) {
-        const result = await prisma.character.create({
-          data: {
-            name,
-            user: { connect: { email: session?.user?.email } },
-          },
-        });
-        // Created
-        res.status(201).json(result);
-      } else {
-        // can't create more than 10 characters
-        res.status(405).json({
-          name: "CREATE_CHARACTER_NO_MORE_THAN_TEN",
-          message: "can't create more than 10 characters",
-        });
-      }
+    if (charactersCount < 10) {
+      const character = await createCharacter(
+        req.body.name,
+        session?.user?.email
+      );
+      // Created
+      return res.status(201).json(character);
     } else {
-      // Method Not Allowed
-      res.status(405);
+      // can't create more than 10 characters
+      return res.status(405).json({
+        name: "CREATE_CHARACTER_NO_MORE_THAN_TEN",
+        message: "can't create more than 10 characters",
+      });
     }
   } else {
-    // Not Signed in
-    res.status(401);
+    // Method Not Allowed
+    res
+      .status(405)
+      .json({ name: "METHOD_NOT_ALLOWED", message: "Method Not Allowed" });
   }
-  res.end();
 };
+
+export default session(handler);

@@ -18,6 +18,7 @@
       "@components/*": ["components/*"],
       "@lib/*": ["lib/*"],
       "@api-client/*": ["api-client/*"],
+      "@services/*": ["services/*"],
       "@dao/*": ["dao/*"],
       "@types/*": ["types/*"]
     },

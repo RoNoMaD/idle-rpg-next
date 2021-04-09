@@ -1,63 +1,71 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
-// import * as yup from "yup";
+import { Session } from "next-auth";
 
-import { updateCharacter } from "../../../services/character";
-
-import prisma from "../../../lib/prisma";
+import { session } from "middleware/session";
+import { updateCharacter } from "@services/characters";
+import { deleteCharacterById } from "@dao/characters";
+import {
+  characterIdSchema,
+  updateCharacterSchema,
+} from "schemas/charactersSchemas";
 
 type CharacterData = {
   name: string;
 };
 
-export default async (
+const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<CharacterData>
+  res: NextApiResponse<CharacterData | Error>,
+  session: Session
 ): Promise<void> => {
-  const session = await getSession({ req });
-  if (session) {
-    const {
-      method,
-      query: { characterId },
-      body: { health, attack, defense, magik },
-    } = req;
+  const { method } = req;
 
-    if (method === "PATCH") {
-      // TODO validate body data
-      // @see https://dev.to/bmvantunes/next-js-api-routes-validation-with-yup-1nd9
-      // or
-      // @see https://dev.to/meddlesome/nextjs-apis-validator-with-middleware-3njl
-      await updateCharacter(Number(characterId), session.user.email, {
-        health,
-        attack,
-        defense,
-        magik,
+  let characterId: number;
+  if (method === "PATCH") {
+    // validation
+    try {
+      characterId = await characterIdSchema.validate(req.query.characterId, {
+        abortEarly: false,
+        stripUnknown: true,
       });
-      // OK (if we choose to return the updated entity)
-      res.status(200);
-
-      // or NO CONTENT
-      // res.status(204);
-      // or Unprocessable request (Unprocessable Entity) (impossible to update entity with these values)
-      // res.status(422);
-      // or Malformed patch document (try to modify unallowed entity fields)
-      // res.status(400);
+      req.body = await updateCharacterSchema.validate(req.body, {
+        abortEarly: false,
+        stripUnknown: true,
+      });
+    } catch (error) {
+      // Malformed patch document (try to modify unallowed entity fields)
+      return res.status(400).json(error);
+    }
+    try {
+      await updateCharacter(characterId, session?.user?.email, req.body);
+    } catch (error) {
       // Resource not found (the entity does not exist)
       // res.status(404);
-    } else if (method === "DELETE") {
-      // TODO check userId
-      const character = await prisma.character.delete({
-        where: { id: Number(characterId) },
-      });
-      // OK
-      res.status(200).json(character);
-    } else {
-      // Method Not Allowed
-      res.status(405);
+      // or Unprocessable request (Unprocessable Entity) (impossible to update entity with these values)
+      res.status(error.code || 500).json(error);
     }
+    // OK (if we choose to return the updated entity)
+    res.status(200);
+  } else if (method === "DELETE") {
+    // validation
+    try {
+      characterId = await characterIdSchema.validate(req.query.characterId, {
+        abortEarly: false,
+        stripUnknown: true,
+      });
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+    // TODO check userId
+    const character = await deleteCharacterById(characterId);
+    // OK
+    res.status(200).json(character);
   } else {
-    // Not Signed in
-    res.status(401);
+    // Method Not Allowed
+    res
+      .status(405)
+      .json({ name: "METHOD_NOT_ALLOWED", message: "Method Not Allowed" });
   }
-  res.end();
 };
+
+export default session(handler);

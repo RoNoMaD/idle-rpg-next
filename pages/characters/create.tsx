@@ -28,8 +28,7 @@ const CreateCharacter: React.FC = () => {
       try {
         await createCharacter(name);
         router.push("/");
-      } catch (errorResponse) {
-        const error = await errorResponse.json();
+      } catch (error) {
         setError(error.message);
         console.error(error);
       }

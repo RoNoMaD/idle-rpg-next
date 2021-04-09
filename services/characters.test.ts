@@ -1,4 +1,4 @@
-import { getIncreaseSkillCost, getIncreaseSkillsCost } from "./character";
+import { getIncreaseSkillCost, getIncreaseSkillsCost } from "./characters";
 
 test("original health at 1 and wanted health at 3 to cost 2 skill points", () => {
   expect(getIncreaseSkillCost(1, "health", 3)).toBe(2);
@@ -32,5 +32,12 @@ original health at 10 and wanted health at 13
     magik: 0,
     userId: 0,
   };
-  expect(getIncreaseSkillsCost(originalCharater, 13, 7, 0, 0)).toBe(11);
+  expect(
+    getIncreaseSkillsCost(originalCharater, {
+      health: 13,
+      attack: 7,
+      defense: 0,
+      magik: 0,
+    })
+  ).toBe(11);
 });

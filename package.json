@@ -23,20 +23,17 @@
     "test:e2e:dev": "start-server-and-test dev http://localhost:3000 cy:open",
     "pretest:e2e:run": "npm run build",
     "test:e2e:run": "start-server-and-test start http://localhost:3000 cy:run",
-    "test:e2e": "is-ci-cli test:e2e:run test:e2e:dev"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check"
-    }
+    "test:e2e": "is-ci-cli test:e2e:run test:e2e:dev",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
       "npm run format",
       "npm run lint",
       "npm run test -- --findRelatedTests"
-    ]
+    ],
+    "*.{ts,tsx,js}": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
     "@prisma/client": "^2.20.1",

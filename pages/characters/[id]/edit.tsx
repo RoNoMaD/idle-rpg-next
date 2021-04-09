@@ -55,8 +55,7 @@ export default function EditCharacter({
               magik,
             });
             router.push("/");
-          } catch (errorResponse) {
-            const error = await errorResponse.json();
+          } catch (error) {
             setError(error.message);
           }
         }}
