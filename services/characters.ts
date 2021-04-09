@@ -9,6 +9,8 @@ type UpdatedValues = {
 };
 
 export class ServiceError extends Error {
+  code: number;
+  description: string;
   constructor(code: number, message: string) {
     super(message);
     this.code = code;

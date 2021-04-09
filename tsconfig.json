@@ -22,7 +22,7 @@
       "@dao/*": ["dao/*"],
       "@types/*": ["types/*"]
     },
-    "types": ["cypress", "@testing-library/cypress"]
+    "types": ["jest"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
