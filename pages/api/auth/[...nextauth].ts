@@ -1,6 +1,6 @@
 import { NextApiHandler } from "next";
-import NextAuth from "next-auth";
-import { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
+
 import Providers from "next-auth/providers";
 import Adapters from "next-auth/adapters";
 import prisma from "../../../lib/prisma";
@@ -8,11 +8,20 @@ import prisma from "../../../lib/prisma";
 const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
 export default authHandler;
 
+const clientId = process.env.GITHUB_ID;
+if (clientId === undefined) {
+  throw new Error("GITHUB_ID env variable is mandatory to run this app");
+}
+const clientSecret = process.env.GITHUB_SECRET;
+if (clientSecret === undefined) {
+  throw new Error("GITHUB_SECRET env variable is mandatory to run this app");
+}
+
 const options: NextAuthOptions = {
   providers: [
     Providers.GitHub({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId,
+      clientSecret,
     }),
   ],
   adapter: Adapters.Prisma.Adapter({ prisma }),
