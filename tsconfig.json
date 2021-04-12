@@ -19,8 +19,7 @@
       "@lib/*": ["lib/*"],
       "@api-client/*": ["api-client/*"],
       "@services/*": ["services/*"],
-      "@dao/*": ["dao/*"],
-      "@types/*": ["types/*"]
+      "@dao/*": ["dao/*"]
     },
     "types": ["jest"]
   },
