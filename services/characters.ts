@@ -1,5 +1,7 @@
 import prisma from "../lib/prisma";
-import { Character } from "@prisma/client";
+import { Character } from "types/index";
+
+import { updateCharacter } from "@dao/characters";
 
 type UpdatedValues = {
   health?: number;
@@ -9,18 +11,27 @@ type UpdatedValues = {
 };
 
 export class ServiceError extends Error {
-  code: number;
-  description: string;
-  constructor(code: number, message: string) {
+  statusCode: number;
+  isOperational: boolean;
+  constructor(
+    statusCode: number,
+    message: string,
+    isOperational = true,
+    stack = ""
+  ) {
     super(message);
-    this.code = code;
-    this.description = message;
+    this.statusCode = statusCode;
+    this.isOperational = isOperational;
     // Ensure the name of this error is the same as the class name
     this.name = this.constructor.name;
     // This clips the constructor invocation from the stack trace.
     // It's not absolutely essential, but it does make the stack trace a little nicer.
     //  @see Node.js reference (bottom)
-    Error.captureStackTrace(this, this.constructor);
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
 
@@ -76,7 +87,7 @@ export function getIncreaseSkillsCost(
  * @return  {Promise<void>}
  * @throws {ServiceError}
  */
-export async function updateCharacter(
+export async function upgradeCharacter(
   characterId: number,
   userEmail: string,
   newSkillsValues: UpdatedValues
@@ -94,17 +105,9 @@ export async function updateCharacter(
 
     // check we have enought skill points
     if (skillCost <= originalCharacter.skillPoints) {
-      await prisma.character.updateMany({
-        where: {
-          id: characterId,
-          user: {
-            email: userEmail,
-          },
-        },
-        data: {
-          ...newSkillsValues,
-          skillPoints: originalCharacter.skillPoints - skillCost,
-        },
+      await updateCharacter(characterId, userEmail, {
+        ...newSkillsValues,
+        skillPoints: originalCharacter.skillPoints - skillCost,
       });
     } else {
       throw new ServiceError(422, "You don't have enought skill points.");

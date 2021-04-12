@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 
 import { session } from "middleware/session";
-import { updateCharacter } from "@services/characters";
+import { upgradeCharacter } from "@services/characters";
 import { deleteCharacterById } from "@dao/characters";
 import {
   characterIdSchema,
@@ -37,7 +37,7 @@ const handler = async (
       return res.status(400).json(error);
     }
     try {
-      await updateCharacter(characterId, session?.user?.email, req.body);
+      await upgradeCharacter(characterId, session.user.email, req.body);
     } catch (error) {
       // Resource not found (the entity does not exist)
       // res.status(404);
@@ -62,9 +62,11 @@ const handler = async (
     res.status(200).json(character);
   } else {
     // Method Not Allowed
-    res
-      .status(405)
-      .json({ name: "METHOD_NOT_ALLOWED", message: "Method Not Allowed" });
+    res.setHeader("Allow", ["PATCH", "DELETE"]);
+    res.status(405).json({
+      name: "METHOD_NOT_ALLOWED",
+      message: `Method ${method} Not Allowed`,
+    });
   }
 };
 

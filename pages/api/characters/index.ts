@@ -39,9 +39,11 @@ const handler = async (
     }
   } else {
     // Method Not Allowed
-    res
-      .status(405)
-      .json({ name: "METHOD_NOT_ALLOWED", message: "Method Not Allowed" });
+    res.setHeader("Allow", ["POST"]);
+    res.status(405).json({
+      name: "METHOD_NOT_ALLOWED",
+      message: `Method ${method} Not Allowed`,
+    });
   }
 };
 
