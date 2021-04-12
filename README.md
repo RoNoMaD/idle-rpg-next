@@ -95,6 +95,39 @@ and run your tests
 npm run test:e2e:run
 ```
 
+## Backend architecture
+
+### 3 layer architecture
+
+For separation of concerns we split the backend code into three layers :
+
+- controllers
+- services
+- data access layer
+
+### Controllers
+
+The controllers are responsible for handling the incoming request to the API and send back a response to the client.
+No business logic should be found inside them.
+Typically they are responsible for :
+
+- authentication
+- authorization
+- parameters validation
+- calling the service layer
+- respond with the data returned by the service or with an error with the corresponding status code
+
+### Services
+
+This is where the business logic of the app take place.
+There should be no direct queries to the database or any reference to the API request or response.
+
+### Data access layer
+
+It provide access to our data store, a database in our case.
+
+This where the call to Prisma ORM are made.
+
 ## Api Reference
 
 ### Characters
